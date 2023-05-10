@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Quickly turn Google Sheets into a public, CDN-backed JSON endpoint."
+    />
+    <title>sheet.spacet.me</title>
+    <meta
+      property="og:image"
+      content="https://capture.the.spacet.me/eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJodHRwczovL3NoZWV0LnNwYWNldC5tZS8iLCJ3aWR0aCI6NjAwLCJoZWlnaHQiOjMxNSwid2FpdFVudGlsIjoibmV0d29ya2lkbGUwIiwiZGV2aWNlU2NhbGVGYWN0b3IiOjIsImlzcyI6ImR0aW50aCJ9.MsJg-jvhui0jN86nbIHbMWOM0s0xzYB2RtWZolAmiv9fJTcl5ZMqX7OJvqLfZJR7s01Wk450y8XKWNjIH1CeLRhReE-AHJ7jpBHsT12v001cYH3Eho1SgzSXcp_VMAW-vr6sl3gKSJYYBCF4lJ9md3kwpskvZJPR78O7_oYQ1f7Bfq-zUyNJZKtd6yj3ZANa_HzONU3ZOBT5LATRz2gIdsP4BJ0x60wMcsK-bpAHJc9-YOxqjUGSiwsXjU1S6oj3BaZCdhQpoqg741VvdZWLEQ_7CK9YjUyhzCwKM4efIBhW2ueFO4kVvDuloo0AhQUHFG9b-Mv6j8XF9fW7zUt9fQ.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-ECSE6V6VK2"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        dataLayer.push(arguments)
+      }
+      gtag('js', new Date())
+
+      gtag('config', 'G-ECSE6V6VK2')
+    </script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.css"
+    />
+    <style>
+      code > strong {
+        color: #379;
+      }
+      input.text-input,
+      textarea {
+        max-width: 100%;
+        box-sizing: border-box;
+        padding-right: 0;
+      }
+      textarea {
+        font-family: Cousine, Consolas, 'Liberation Mono', Menlo, Courier,
+          monospace;
+      }
+      button {
+        padding-left: 1em;
+        padding-right: 1em;
+      }
+      .code-gen-grid {
+        display: grid;
+        box-sizing: border-box;
+        gap: 1rem;
+        grid-template-areas:
+          'how-to-fetch'
+          'postprocessing'
+          'example'
+          'code'
+          'tip';
+      }
+      @media (min-width: 600px) {
+        .code-gen-grid {
+          grid-template-areas:
+            'how-to-fetch example'
+            'postprocessing example'
+            'code code'
+            'tip tip';
+          grid-template-columns: 1fr 2fr;
+        }
+      }
+      .code-gen-grid > p {
+        margin: 0;
+      }
+      .example {
+        background: var(--background-body);
+        padding: 0.5em;
+        border-radius: 6px;
+        font-size: 0.75em;
+      }
+      .example table {
+        table-layout: auto;
+        border: 2px solid #aaa;
+        width: auto;
+        margin: 0;
+      }
+      .example th,
+      .example td {
+        padding: 0.25em;
+        border: 1px solid #ccc;
+      }
+    </style>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-ECSE6V6VK2"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        dataLayer.push(arguments)
+      }
+      gtag('js', new Date())
+
+      gtag('config', 'G-ECSE6V6VK2')
+    </script>
+  </head>
+  <body>
+    <h1>sheet.spacet.me</h1>
+    <p>Quickly turn Google Sheets into a public, CDN-backed JSON endpoint.</p>
+
+    <h2>Usage</h2>
+    <ol>
+      <li>
+        Make the sheet accessible to this service by doing any of these:
+        <ul>
+          <li>
+            Share the sheet with <code id="email">(service account email)</code>
+          </li>
+          <li>Make the sheet viewable by anyone with the link.</li>
+        </ul>
+      </li>
+      <li>Use the API (see below).</li>
+    </ol>
+
+    <script>
+      fetch('/api/sheet')
+        .then((r) => r.json())
+        .then((x) => (document.querySelector('#email').textContent = x.email))
+    </script>
+
+    <h2>API</h2>
+    <ul>
+      <li>
+        <code
+          >GET /<strong>sheetId</strong>/<strong>sheetName</strong>.json</code
+        >
+        &mdash; Returns the sheet data as JSON (<a
+          href="/1_hCWsZ13xSnjnmSCx4flTFJCZ6D4yRZjDsaYDchqu08/Sheet1.json"
+          >example</a
+        >)
+      </li>
+    </ul>
+
+    <h2>URL and code generator</h2>
+    <form>
+      <p>
+        <label for="sheet-url">Google Sheet URL:</label>
+        <input class="text-input" id="sheet-url" type="text" size="100" />
+      </p>
+      <p>
+        <label for="sheet-name">Sheet name:</label>
+        <input class="text-input" id="sheet-name" type="text" size="16" />
+      </p>
+      <p>
+        <label for="endpoint-url"><strong>Endpoint URL:</strong></label>
+        <span style="display: flex; gap: 1ex">
+          <span style="flex: auto">
+            <input
+              class="text-input"
+              name="endpoint"
+              style="width: 100%"
+              id="endpoint-url"
+              type="text"
+              size="100"
+              value=""
+              readonly
+            />
+          </span>
+          <span style="flex: none">
+            <!-- Copy to clipboard button -->
+            <button
+              type="button"
+              onclick="this.form.endpoint.focus(); this.form.endpoint.select(); document.execCommand('copy');"
+            >
+              Copy
+            </button>
+          </span>
+        </span>
+      </p>
+
+      <details open>
+        <summary>Code generator</summary>
+        <div class="code-gen-grid">
+          <p style="grid-area: how-to-fetch">
+            <label for="how-to-fetch">Data fetching method:</label>
+            <select id="how-to-fetch">
+              <option disabled selected>(loading config)</option>
+            </select>
+          </p>
+
+          <p style="grid-area: postprocessing">
+            <label for="postprocessing">Post-processing:</label>
+            <select id="postprocessing">
+              <option disabled selected>(loading config)</option>
+            </select>
+          </p>
+
+          <div style="grid-area: example; align-self: end" class="example">
+            <div id="example-flavor-text"></div>
+            <div
+              style="
+                display: flex;
+                gap: 0.5em;
+                margin-top: 1em;
+                align-items: center;
+              "
+            >
+              <div>
+                <table>
+                  <tbody id="example-table"></tbody>
+                </table>
+              </div>
+              <div>&rarr;</div>
+              <div style="flex: auto">
+                <textarea id="example-json" readonly rows="2"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <p style="grid-area: code">
+            <label for="code"><strong>Code:</strong></label>
+            <textarea id="code" readonly rows="16"></textarea>
+            <span style="display: block; text-align: right">
+              <!-- Copy to clipboard button -->
+              <button
+                type="button"
+                style="margin: 0"
+                onclick="this.form.code.focus(); this.form.code.select(); document.execCommand('copy');"
+              >
+                Copy
+              </button>
+            </span>
+          </p>
+
+          <p style="grid-area: tip">
+            <em>
+              Did you know? The above templates are defined in
+              <a
+                href="https://docs.google.com/spreadsheets/d/1_hCWsZ13xSnjnmSCx4flTFJCZ6D4yRZjDsaYDchqu08/edit?usp=sharing"
+                >this config spreadsheet</a
+              >.</em
+            >
+          </p>
+        </div>
+      </details>
+    </form>
+    <script>
+      {
+        const $ = (selector) => document.querySelector(selector)
+        const $sheetUrl = $('#sheet-url')
+        const $sheetName = $('#sheet-name')
+        const $endpointUrl = $('#endpoint-url')
+
+        // -- Config loading --
+        const loadConfig = async () => {
+          const { values } = await fetch(
+            '/1_hCWsZ13xSnjnmSCx4flTFJCZ6D4yRZjDsaYDchqu08/Sheet1.json',
+          ).then((r) => r.json())
+          const config = Object.fromEntries(
+            values.slice(1).map(([key, value]) => [key, value]),
+          )
+          return config
+        }
+        const configPromise = loadConfig()
+
+        // -- URL generator --
+        const getEndpointUrl = () => {
+          const url = $sheetUrl.value || $sheetUrl.placeholder
+          const name = $sheetName.value.trim()
+          const match = url.match(/\/d\/([^\/]+)/)
+          if (!match) {
+            return '⚠️ Missing sheet URL'
+          }
+          if (!name) {
+            return '⚠️ Missing sheet name'
+          }
+          const sheetNameRegex = /^[a-zA-Z0-9_-]+$/
+          if (!sheetNameRegex.test(name)) {
+            return '⚠️ Sheet name may only contain letters, numbers, dashes, and underscores'
+          }
+          const sheetId = match[1]
+          const endpoint = `/${sheetId}/${name}.json`
+          return location.origin + endpoint
+        }
+        const update = () => {
+          $endpointUrl.value = getEndpointUrl()
+        }
+        $sheetUrl.addEventListener('change', update)
+        $sheetName.addEventListener('change', update)
+        configPromise.then((config) => {
+          $sheetUrl.placeholder = config['Default sheet URL']
+          if (!$sheetName.value) {
+            $sheetName.value = config['Default sheet name']
+          }
+          update()
+        })
+
+        // -- Code generator --
+        const $howToFetch = $('#how-to-fetch')
+        const $postprocessing = $('#postprocessing')
+        const getConfigOptions = (config, prefix) => {
+          prefix += ': '
+          return Object.keys(config)
+            .filter((key) => key.startsWith(prefix))
+            .map((key) => `${key.slice(prefix.length)}`)
+        }
+        configPromise.then((config) => {
+          const updateCode = () => {
+            const howToFetch = $howToFetch.value
+            const postprocessing = $postprocessing.value
+            const functionTemplate = config['Function template']
+            const endpointUrl = getEndpointUrl()
+            const parts = endpointUrl.split('/')
+            const substitutions = {
+              $sheetId: parts[parts.length - 2],
+              $sheetName: (parts[parts.length - 1] || '').slice(0, -5),
+              $baseUrl: parts.slice(0, -2).join('/'),
+              $endpoint: getEndpointUrl(),
+              $fetch: config[`Fetch template: ${howToFetch}`],
+              $process: config[`Processing template: ${postprocessing}`],
+            }
+            const code = functionTemplate.replace(
+              /\$\w+/g,
+              (match) => substitutions[match] || match,
+            )
+            $('#code').value = code
+            $('#example-flavor-text').innerHTML = ''
+            const strong = document.createElement('strong')
+            strong.textContent = `${postprocessing}: `
+            $('#example-flavor-text').appendChild(strong)
+            $('#example-flavor-text').appendChild(
+              document.createTextNode(
+                config[`Processing description: ${postprocessing}`],
+              ),
+            )
+
+            populateTable(
+              $('#example-table'),
+              $('#example-json'),
+              config[`Processing example: ${postprocessing}`],
+            )
+          }
+
+          populateSelect(
+            $howToFetch,
+            getConfigOptions(config, 'Fetch template'),
+          )
+          populateSelect(
+            $postprocessing,
+            getConfigOptions(config, 'Processing template'),
+          )
+          $sheetUrl.addEventListener('change', updateCode)
+          $sheetName.addEventListener('change', updateCode)
+          $howToFetch.addEventListener('change', updateCode)
+          $postprocessing.addEventListener('change', updateCode)
+          updateCode()
+        })
+        const populateSelect = (select, options) => {
+          select.innerHTML = ''
+          options.forEach((option) => {
+            const optionElement = document.createElement('option')
+            optionElement.value = option
+            optionElement.textContent = option
+            select.appendChild(optionElement)
+          })
+        }
+        const populateTable = (tbody, out, data) => {
+          const [from, to] = data.split('\n---\n')
+          const rows = from.split('\n')
+          tbody.innerHTML = ''
+          for (let row of rows) {
+            let rowIsHeader = row.startsWith('#')
+            if (rowIsHeader) {
+              row = row.slice(1)
+            }
+            const rowElement = document.createElement('tr')
+            for (const cell of row.split('|')) {
+              const tag = rowIsHeader ? 'th' : 'td'
+              const cellElement = document.createElement(tag)
+              cellElement.textContent = cell
+              rowElement.appendChild(cellElement)
+            }
+            tbody.appendChild(rowElement)
+          }
+          out.textContent = to
+        }
+      }
+    </script>
+
+    <h2>Usage notes</h2>
+    <ul>
+      <li>
+        <p>
+          The endpoint is CORS-enabled and is backed by two layers of CDN
+          caching (<a
+            href="https://support.cloudflare.com/hc/en-us/articles/200172516-Understanding-Cloudflare-s-CDN"
+            >Cloudflare</a
+          >
+          and
+          <a href="https://vercel.com/docs/edge-network/caching"
+            >Vercel Edge Network</a
+          >), so client-side applications can fetch data directly from this
+          service without worrying about
+          <a href="https://developers.google.com/sheets/api/reference/limits"
+            >Google Sheets API rate limit</a
+          >. Due to our caching strategy, the sheet contents may be delayed by
+          about <strong>1 minute</strong> (subject to change).
+        </p>
+      </li>
+      <li>
+        <p>
+          I made this API mainly for my own convenience. While you are welcome
+          to use it, there is no support nor uptime guarantee. But this project
+          is open source, and you can run your own instance.
+          <a href="https://github.com/dtinth/sheet.spacet.me"
+            >Source code is on GitHub.</a
+          >
+        </p>
+      </li>
+    </ul>
+
+    <hr />
+    <p>API built by <a href="https://dt.in.th">@dtinth</a>.</p>
+    <script>
+      if (location.hash === '#og') {
+        document.body.style.marginTop = '150px'
+      }
+    </script>
+    <script>
+      fetch('/api/random-tweet')
+        .then((r) => r.json())
+        .catch((e) => {
+          return {
+            text: `${e}`,
+          }
+        })
+        .then((j) => {
+          textEl.textContent = j.text
+          if (j.user) {
+            attributionEl.innerHTML = `&mdash;<a href="${j.url}">@${j.user.screen_name}</a>`
+          }
+        })
+    </script>
+  </body>
+</html>
